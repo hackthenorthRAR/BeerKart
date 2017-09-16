@@ -38,7 +38,7 @@ def index():
     cur.execute("CREATE TABLE IF NOT EXISTS accounts (id INT PRIMARY KEY, email VARCHAR)")
 
     # Insert two rows into the "accounts" table.
-    cur.execute("INSERT INTO accounts (id, email) VALUES (1, 'hello@gmail.com'), (2, 'hello2@gmail.com')")
+    #cur.execute("INSERT INTO accounts (id, email) VALUES (1, 'hello@gmail.com'), (2, 'hello2@gmail.com')")
 
     # Print out the balances.
     cur.execute("SELECT id, email FROM accounts")
