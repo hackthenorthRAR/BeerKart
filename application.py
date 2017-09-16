@@ -89,7 +89,6 @@ def apiRequest():
 
     # Open a cursor to perform database operations.
     cur = conn.cursor()
-
     cur.execute(
         "CREATE TABLE IF NOT EXISTS requests (googleid VARCHAR, id SERIAL PRIMARY KEY, bottletype VARCHAR, bottlecount VARCHAR, message VARCHAR, latitude float, longitude float)"
     )
@@ -113,12 +112,22 @@ def apiRequest():
          + "VALUES ('" + googleId + "', '" + bottleType + "', " + str(lat) + ", " + str(lon) + ", '" + bottleCount + "', '" + comment + "')"
     )
     cur.close()
-
     return render_template('redirectToMain.html')
 
-@app.route('/orders')
-def orders():
-    return render_template('orders.html')
+@app.route('/pickup', methods=['GET', 'POST'])
+def getRequest():
+    # database link
+    conn = psycopg2.connect(database='users', user='maxroach', host='localhost', port=26257)
+
+    # Make each statement commit immediately.
+    conn.set_session(autocommit=True)
+
+    # Open a cursor to perform database operations.
+    cur = conn.cursor()
+
+    cur.execute("SELECT latitude, longitude FROM requests")
+
+    return render_template("pickup.html", rows=cur.fetchall())
 
 @app.route('/makeRequest')
 def requestPage():
@@ -132,3 +141,9 @@ def confirmRequest():
         bottleType = request.form['bottleType'],
         comment = request.form['comment']
     )
+
+    # TODO
+    # if user click on one of the requests
+    # request:id is deleted from database
+    # user gets notification that their request is under way
+    # show the current location and things nearby on the map
