@@ -89,6 +89,14 @@ def apiRequest():
 
     # Open a cursor to perform database operations.
     cur = conn.cursor()
+    cur.execute(
+        "CREATE TABLE IF NOT EXISTS requests (googleid VARCHAR, id INT_PRIMARY_KEY AUTO_INCREMENT, bottletype INT, bottlecount INT, message VARCHAR, latitude float, longitude float)"
+    )
+
+    id = request.form['id']
+    bottletype = request.form['bottletype']
+    bottlecount = request.form['bottlecount']
+    message = request.form['message']
 
     cur.execute(
         "CREATE TABLE IF NOT EXISTS requests (googleid VARCHAR, id SERIAL PRIMARY KEY, bottletype VARCHAR, bottlecount VARCHAR, message VARCHAR, latitude float, longitude float)"
@@ -113,12 +121,35 @@ def apiRequest():
          + "VALUES ('" + googleId + "', '" + bottleType + "', " + str(lat) + ", " + str(lon) + ", '" + bottleCount + "', '" + comment + "')"
     )
     cur.close()
-
     return render_template('redirectToMain.html')
 
-@app.route('/orders')
-def orders():
-    return render_template('orders.html')
+@app.route('/pickup', methods=['POST', 'GET'])
+def pickup():
+    # database link
+    conn = psycopg2.connect(database='users', user='maxroach', host='localhost', port=26257)
+
+    # Make each statement commit immediately.
+    conn.set_session(autocommit=True)
+
+    # open a cursor
+    cur = conn.cursor()
+
+    send_url = 'http://freegeoip.net/json'
+    r = requests.get(send_url)
+    j = json.loads(r.text)
+    lat = j['latitude']
+    lon = j['longitude']
+
+    gid = request.form["id"]
+
+    cur.execute(
+        "CREATE TABLE IF NOT EXISTS pickup (googleid VARCHAR, id SERIAL PRIMARY KEY, latitude float, longitude float)"
+    )
+
+    # on click of pickup request
+    cur.execute(
+         "INSERT INTO pickup (googleid, latitude, longitude) VALUES (gid, lat, lon)"
+    )
 
 @app.route('/makeRequest')
 def requestPage():
@@ -132,3 +163,9 @@ def confirmRequest():
         bottleType = request.form['bottleType'],
         comment = request.form['comment']
     )
+
+    # TODO
+    # if user click on one of the requests
+    # request:id is deleted from database
+    # user gets notification that their request is under way
+    # show the current location and things nearby on the map
