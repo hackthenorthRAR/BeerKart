@@ -123,33 +123,20 @@ def apiRequest():
     cur.close()
     return render_template('redirectToMain.html')
 
-@app.route('/pickup', methods=['POST', 'GET'])
-def pickup():
+@app.route('/pickup', methods=['GET', 'POST'])
+def getRequest():
     # database link
     conn = psycopg2.connect(database='users', user='maxroach', host='localhost', port=26257)
 
     # Make each statement commit immediately.
     conn.set_session(autocommit=True)
 
-    # open a cursor
+    # Open a cursor to perform database operations.
     cur = conn.cursor()
 
-    send_url = 'http://freegeoip.net/json'
-    r = requests.get(send_url)
-    j = json.loads(r.text)
-    lat = j['latitude']
-    lon = j['longitude']
+    cur.execute("SELECT latitude, longitude FROM requests")
 
-    gid = request.form["id"]
-
-    cur.execute(
-        "CREATE TABLE IF NOT EXISTS pickup (googleid VARCHAR, id SERIAL PRIMARY KEY, latitude float, longitude float)"
-    )
-
-    # on click of pickup request
-    cur.execute(
-         "INSERT INTO pickup (googleid, latitude, longitude) VALUES (gid, lat, lon)"
-    )
+    return render_template("pickup.html", rows=cur.fetchall())
 
 @app.route('/makeRequest')
 def requestPage():
