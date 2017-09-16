@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
 from flask_session import Session
 from tempfile import mkdtemp
+import requests
+import json
 
 app = Flask(__name__)
 
@@ -35,10 +37,6 @@ def index():
     # Create the "accounts" table.
     cur.execute("CREATE TABLE IF NOT EXISTS accounts (id VARCHAR PRIMARY KEY, email VARCHAR, dropped INT default 0, picked INT default 0)")
 
-    # Insert two rows into the "accounts" table.
-
-    #cur.execute("INSERT INTO accounts (id, email) VALUES (1, 'hello@gmail.com'), (2, 'hello2@gmail.com')")
-
     # Print out the balances.
     cur.execute("SELECT id, email, dropped, picked FROM accounts")
     rows = cur.fetchall()
@@ -51,15 +49,6 @@ def index():
     conn.close()
 
     return render_template('index.html')
-
-
-#@app.route("/login")
-#def login():
-    #empty function
-
-#@app.route("/pickup", methods=["GET", "POST"])
-#def pickup():
-    #empty function
 
 @app.route('/home')
 def main():
@@ -89,3 +78,45 @@ def signIn():
     )
     cur.close()
     return 'new account'
+
+
+@app.route('/api/request', methods=['POST', 'GET'])
+def request():
+    # database link
+    conn = psycopg2.connect(database='users', user='maxroach', host='localhost', port=26257)
+
+    # Make each statement commit immediately.
+    conn.set_session(autocommit=True)
+
+    cur.execute(
+        "CREATE TABLE IF NOT EXISTS requests (googleid VARCHAR, id INT_PRIMARY_KEY AUTO_INCREMENT, bottletype INT, bottlecount INT, message VARCHAR, latitude float, longitude float)"
+    )
+    # Open a cursor to perform database operations.
+    cur = conn.cursor()
+    id = request.form['id']
+    bottletype = request.form['bottletype']
+    bottlecount = request.form['bottlecount']
+    message = request.form['message']
+
+    rows = cur.fetchall()
+
+    cur.close()
+
+    send_url = 'http://freegeoip.net/json'
+    r = requests.get(send_url)
+    j = json.loads(r.text)
+    lat = j['latitude']
+    lon = j['longitude']
+
+    print(lat, lon)
+
+    cur.execute(
+         "INSERT INTO requests (bottletype, latitude, longitude, bottlecount, message) VALUES (bottletype, lat, lon, bottlecount, message)"
+    )
+
+    return render_template('/api/request')
+
+@app.route('/orders')
+def orders():
+    return render_template('orders.html')
+
