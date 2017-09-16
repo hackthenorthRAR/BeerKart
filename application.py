@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_session import Session
+from tempfile import mkdtemp
 
 app = Flask(__name__)
 
@@ -37,7 +38,7 @@ def index():
     cur.execute("CREATE TABLE IF NOT EXISTS accounts (id INT PRIMARY KEY, email VARCHAR)")
 
     # Insert two rows into the "accounts" table.
-    cur.execute("INSERT INTO accounts (id, email) VALUES (1, 'hello@gmail.com'), (2, 'hello2@gmail.com')")
+    #cur.execute("INSERT INTO accounts (id, email) VALUES (1, 'hello@gmail.com'), (2, 'hello2@gmail.com')")
 
     # Print out the balances.
     cur.execute("SELECT id, email FROM accounts")
@@ -52,11 +53,14 @@ def index():
 
     return render_template('index.html')
 
-@app.route("/login")
-def login():
+#@app.route("/login")
+#def login():
+    #empty function
 
-# insert google Authorization
+#@app.route("/pickup", methods=["GET", "POST"])
+#def pickup():
+    #empty function
 
-@app.route("/pickup", methods=["GET", "POST"])
-@login_required
-def pickup():
+@app.route('/main')
+def main():
+    return render_template('main.html')
