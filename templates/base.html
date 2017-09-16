@@ -2,9 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="google-signin-client_id" content="1040950080226-7781a0dpiheilrrknlld2uogf77v7ape.apps.googleusercontent.com">
     <title>BeerKart</title>
     <link rel="stylesheet" href="style.css">
   </head>
+  <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase-auth.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDCA4V4PCusJEzMaxISVBJuypkWoZHKTEg",
+      authDomain: "hackthenorth2017-180104.firebaseapp.com",
+      databaseURL: "https://hackthenorth2017-180104.firebaseio.com",
+      projectId: "hackthenorth2017-180104",
+      storageBucket: "hackthenorth2017-180104.appspot.com",
+      messagingSenderId: "1040950080226"
+    };
+    firebase.initializeApp(config);
+  </script>
   <body>
 	<header>
 		<h1>Hey yo it's BeerKart am i right?</h1>

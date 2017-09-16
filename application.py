@@ -55,8 +55,10 @@ def index():
 @app.route("/login")
 def login():
 
-# insert google Authorization
-
 @app.route("/pickup", methods=["GET", "POST"])
 @login_required
 def pickup():
+
+@app.route('/main')
+def main():
+    return render_template('main.html')
