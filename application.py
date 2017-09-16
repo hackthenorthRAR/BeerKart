@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_session import Session
 from tempfile import mkdtemp
 
@@ -22,20 +22,18 @@ Session(app)
 # import the driver
 import psycopg2
 
-# database link
-conn = psycopg2.connect(database='users', user='maxroach', host='localhost', port=26257)
-
-# Make each statement commit immediately.
-conn.set_session(autocommit=True)
-
-# Open a cursor to perform database operations.
-cur = conn.cursor()
-
 @app.route('/')
 def index():
+    # database link
+    conn = psycopg2.connect(database='users', user='maxroach', host='localhost', port=26257)
+
+    # Make each statement commit immediately.
+    conn.set_session(autocommit=True)
+    # Open a cursor to perform database operations.
+    cur = conn.cursor()
 
     # Create the "accounts" table.
-    cur.execute("CREATE TABLE IF NOT EXISTS accounts (id INT PRIMARY KEY, email VARCHAR, dropped INT, picked  INT)")
+    cur.execute("CREATE TABLE IF NOT EXISTS accounts (id VARCHAR PRIMARY KEY, email VARCHAR, dropped INT default 0, picked INT default 0)")
 
     # Insert two rows into the "accounts" table.
 
@@ -63,6 +61,31 @@ def index():
 #def pickup():
     #empty function
 
-@app.route('/main')
+@app.route('/home')
 def main():
-    return render_template('main.html')
+    return render_template('home.html')
+
+# Post Requests
+@app.route('/api/signIn', methods=['POST'])
+def signIn():
+    # database link
+    conn = psycopg2.connect(database='users', user='maxroach', host='localhost', port=26257)
+
+    # Make each statement commit immediately.
+    conn.set_session(autocommit=True)
+    # Open a cursor to perform database operations.
+    cur = conn.cursor()
+    id = request.form['id']
+    email = request.form['email']
+    cur.execute("SELECT id, email FROM accounts WHERE id='" + id + "'")
+    rows = cur.fetchall()
+
+    for row in rows:
+        if row[0] == id and row[1] == email:
+            return 'signed in'
+
+    cur.execute(
+        "INSERT INTO accounts (id, email) VALUES ('" + id + "', '" + email + "')"
+    )
+    cur.close()
+    return 'new account'
