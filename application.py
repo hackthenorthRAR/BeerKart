@@ -79,28 +79,25 @@ def signIn():
     cur.close()
     return 'new account'
 
-
-@app.route('/api/request', methods=['POST', 'GET'])
-def request():
+@app.route('/api/request', methods=['POST'])
+def apiRequest():
     # database link
     conn = psycopg2.connect(database='users', user='maxroach', host='localhost', port=26257)
 
     # Make each statement commit immediately.
     conn.set_session(autocommit=True)
 
-    cur.execute(
-        "CREATE TABLE IF NOT EXISTS requests (googleid VARCHAR, id INT_PRIMARY_KEY AUTO_INCREMENT, bottletype INT, bottlecount INT, message VARCHAR, latitude float, longitude float)"
-    )
     # Open a cursor to perform database operations.
     cur = conn.cursor()
-    id = request.form['id']
-    bottletype = request.form['bottletype']
-    bottlecount = request.form['bottlecount']
-    message = request.form['message']
 
-    rows = cur.fetchall()
+    cur.execute(
+        "CREATE TABLE IF NOT EXISTS requests (googleid VARCHAR, id SERIAL PRIMARY KEY, bottletype VARCHAR, bottlecount VARCHAR, message VARCHAR, latitude float, longitude float)"
+    )
 
-    cur.close()
+    googleId = request.form['id']
+    bottleType = request.form['bottleType']
+    bottleCount = request.form['bottleCount']
+    comment = request.form['comment']
 
     send_url = 'http://freegeoip.net/json'
     r = requests.get(send_url)
@@ -111,12 +108,27 @@ def request():
     print(lat, lon)
 
     cur.execute(
-         "INSERT INTO requests (bottletype, latitude, longitude, bottlecount, message) VALUES (bottletype, lat, lon, bottlecount, message)"
+         "INSERT INTO requests " + 
+         "(googleid, bottletype, latitude, longitude, bottlecount, message)"
+         + "VALUES ('" + googleId + "', '" + bottleType + "', " + str(lat) + ", " + str(lon) + ", '" + bottleCount + "', '" + comment + "')"
     )
+    cur.close()
 
-    return render_template('/api/request')
+    return render_template('redirectToMain.html')
 
 @app.route('/orders')
 def orders():
     return render_template('orders.html')
 
+@app.route('/makeRequest')
+def requestPage():
+    return render_template('makeRequest.html')
+
+@app.route('/confirmRequest', methods=['POST'])
+def confirmRequest():
+    return render_template(
+        'confirmRequest.html',
+        bottleCount = request.form['bottleCount'],
+        bottleType = request.form['bottleType'],
+        comment = request.form['comment']
+    )

@@ -5,7 +5,7 @@
     <meta name="google-signin-client_id" content="1040950080226-7781a0dpiheilrrknlld2uogf77v7ape.apps.googleusercontent.com">
     <title>BeerKart</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/static/style.css">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- jQuery library -->
@@ -13,6 +13,7 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/static/style.css">
+    {% block extraStyles %}{% endblock %}
   </head>
   <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase-app.js"></script>
@@ -56,26 +57,6 @@
           // ...
         });
     }
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user && window.location.pathname === '/') {
-        $.ajax({
-            type: 'POST',
-            url: '/api/signIn',
-            data: {
-                id: user.uid,
-                email: user.email
-            }
-        }).done(
-            function() {
-                window.location = '/home';
-            }
-        ).fail(
-            function() {
-                alert('error');
-            }
-        );
-      }
-    });
     </script>
 	<main>
 		{% block main %}{% endblock %}

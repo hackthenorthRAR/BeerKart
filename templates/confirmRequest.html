@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="wrapper">
+    <form method='POST' action='/api/request' class="form-pickup">
+      <h2 class="form-pickup-heading" style="text-align:center;">New Pick Up Order Summary</h2>
+      <p style="float:left;padding-right:10px;">Bottle Type:</p>
+      <p style="clear:right;">{{ bottleType }}</p>
+      <p style="float:left;padding-right:10px;">Quantity:</p>
+      <p>{{ bottleCount }}</p>
+      <hr style="clear:both;">
+      <h4 style="clear:both;">Message:</h4>
+      <p>{{ comment }}</p>
+      <button class="btn btn-lg btn-primary btn-block button-call-to-action" type="submit">Complete</button>
+
+      <input type='hidden' name='bottleType' value='{{ bottleType }}'>
+      <input type='hidden' name='bottleCount' value='{{ bottleCount }}'>
+      <input type='hidden' name='comment' value='{{ comment }}'>
+      <input id='formId' type='hidden' name='id' value=''>
+    </form>
+    <script>
+      firebase.auth().onAuthStateChanged(function(user) {
+        $('#formId').val(user.uid);
+    });
+  </script>
+</div>
+
+{% endblock %}

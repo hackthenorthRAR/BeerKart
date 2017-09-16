@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block main %}
+  <div class="wrapper">
+    <form method='POST' action='/confirmRequest' class="form-pickup">
+      <h2 class="form-pickup-heading">New Pick Up Order</h2>
+      <select name='bottleType' class="bottle-type-input form-control form-spacing">
+        <option value="1 Litre">1 Litre</option>
+        <option value="630 ML">630 ML</option>
+      </select>
+      <select name='bottleCount' class="quantity-input form-control form-spacing">
+        <option value="1-5">1-5</option>
+        <option value="6-10">6-10</option>
+        <option value="11-15">11-15</option>
+        <option value="16-20">16-20</option>
+      </select>
+      <textarea name="comment" class="form-spacing">Enter a message here (optional)</textarea>
+      <!-- <p class="more-bottle">Add Another Bottle</p> -->
+      <button class="btn btn-lg btn-primary btn-block button-call-to-action" type="submit">Place Order</button>
+    </form>
+</div>
+{% endblock %}
