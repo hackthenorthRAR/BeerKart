@@ -35,13 +35,14 @@ cur = conn.cursor()
 def index():
 
     # Create the "accounts" table.
-    cur.execute("CREATE TABLE IF NOT EXISTS accounts (id INT PRIMARY KEY, email VARCHAR)")
+    cur.execute("CREATE TABLE IF NOT EXISTS accounts (id INT PRIMARY KEY, email VARCHAR, dropped INT, picked  INT)")
 
     # Insert two rows into the "accounts" table.
+
     #cur.execute("INSERT INTO accounts (id, email) VALUES (1, 'hello@gmail.com'), (2, 'hello2@gmail.com')")
 
     # Print out the balances.
-    cur.execute("SELECT id, email FROM accounts")
+    cur.execute("SELECT id, email, dropped, picked FROM accounts")
     rows = cur.fetchall()
     print('Initial data:')
     for row in rows:
@@ -52,6 +53,7 @@ def index():
     conn.close()
 
     return render_template('index.html')
+
 
 #@app.route("/login")
 #def login():
