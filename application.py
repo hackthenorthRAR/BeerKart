@@ -88,19 +88,19 @@ def request():
     # Make each statement commit immediately.
     conn.set_session(autocommit=True)
 
+    # Open a cursor to perform database operations.
+    cur = conn.cursor()
+
     cur.execute(
         "CREATE TABLE IF NOT EXISTS requests (googleid VARCHAR, id INT_PRIMARY_KEY AUTO_INCREMENT, bottletype INT, bottlecount INT, message VARCHAR, latitude float, longitude float)"
     )
-    # Open a cursor to perform database operations.
-    cur = conn.cursor()
+
     id = request.form['id']
     bottletype = request.form['bottletype']
     bottlecount = request.form['bottlecount']
     message = request.form['message']
 
     rows = cur.fetchall()
-
-    cur.close()
 
     send_url = 'http://freegeoip.net/json'
     r = requests.get(send_url)
@@ -114,9 +114,40 @@ def request():
          "INSERT INTO requests (bottletype, latitude, longitude, bottlecount, message) VALUES (bottletype, lat, lon, bottlecount, message)"
     )
 
+    cur.close()
+
     return render_template('/api/request')
 
-@app.route('/orders')
-def orders():
-    return render_template('orders.html')
+@app.route('/pickup', methods=['POST', 'GET'])
+def pickup():
+    # database link
+    conn = psycopg2.connect(database='users', user='maxroach', host='localhost', port=26257)
 
+    # Make each statement commit immediately.
+    conn.set_session(autocommit=True)
+
+    # open a cursor
+    cur = conn.cursor()
+
+    send_url = 'http://freegeoip.net/json'
+    r = requests.get(send_url)
+    j = json.loads(r.text)
+    lat = j['latitude']
+    lon = j['longitude']
+
+    gid = request.form["id"]
+
+    cur.execute(
+        "CREATE TABLE IF NOT EXISTS pickup (googleid VARCHAR, id SERIAL PRIMARY KEY, latitude float, longitude float)"
+    )
+
+    # on click of pickup request
+    cur.execute(
+         "INSERT INTO pickup (googleid, latitude, longitude) VALUES (gid, lat, lon)"
+    )
+
+    # TODO
+    # if user click on one of the requests
+    # request:id is deleted from database
+    # user gets notification that their request is under way
+    # show the current location and things nearby on the map
