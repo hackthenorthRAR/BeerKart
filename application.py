@@ -90,15 +90,6 @@ def apiRequest():
     # Open a cursor to perform database operations.
     cur = conn.cursor()
     cur.execute(
-        "CREATE TABLE IF NOT EXISTS requests (googleid VARCHAR, id INT_PRIMARY_KEY AUTO_INCREMENT, bottletype INT, bottlecount INT, message VARCHAR, latitude float, longitude float)"
-    )
-
-    id = request.form['id']
-    bottletype = request.form['bottletype']
-    bottlecount = request.form['bottlecount']
-    message = request.form['message']
-
-    cur.execute(
         "CREATE TABLE IF NOT EXISTS requests (googleid VARCHAR, id SERIAL PRIMARY KEY, bottletype VARCHAR, bottlecount VARCHAR, message VARCHAR, latitude float, longitude float)"
     )
 
