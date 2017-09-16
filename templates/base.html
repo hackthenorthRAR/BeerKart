@@ -4,7 +4,15 @@
     <meta charset="utf-8">
     <meta name="google-signin-client_id" content="1040950080226-7781a0dpiheilrrknlld2uogf77v7ape.apps.googleusercontent.com">
     <title>BeerKart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="style.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
   </head>
   <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase-app.js"></script>
@@ -26,9 +34,49 @@
     firebase.initializeApp(config);
   </script>
   <body>
-	<header>
-		<h1>Hey yo it's BeerKart am i right?</h1>
-	</header>
+    <!-- NAVIGATION -->
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href='/'><img src="/static/BeerKart.svg" alt="BeerKart logo" class="logo"/></a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" onclick='signIn()'>Login</a></li>
+            </ul>
+        </div>
+    </nav>
+    <script>
+    var provider = new firebase.auth.GoogleAuthProvider();
+    function signIn() {
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          var token = result.credential.accessToken;
+          // The signed-in user info.
+          var user = result.user;
+          // ...
+        });
+    }
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user && window.location.pathname === '/') {
+        $.ajax({
+            type: 'POST',
+            url: '/api/signIn',
+            data: {
+                id: user.uid,
+                email: user.email
+            }
+        }).done(
+            function() {
+                window.location = '/home';
+            }
+        ).fail(
+            function() {
+                alert('error');
+            }
+        );
+      }
+    });
+    </script>
 	<main>
 		{% block main %}{% endblock %}
 	</main>
