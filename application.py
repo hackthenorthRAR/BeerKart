@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_session import Session
+from tempfile import mkdtemp
 
 app = Flask(__name__)
 
@@ -52,12 +53,13 @@ def index():
 
     return render_template('index.html')
 
-@app.route("/login")
-def login():
+#@app.route("/login")
+#def login():
+    #empty function
 
-@app.route("/pickup", methods=["GET", "POST"])
-@login_required
-def pickup():
+#@app.route("/pickup", methods=["GET", "POST"])
+#def pickup():
+    #empty function
 
 @app.route('/main')
 def main():
