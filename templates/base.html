@@ -57,6 +57,11 @@
           // ...
         });
     }
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user === null && window.location.pathname !== '/') {
+        window.location = '/';
+      }
+    });
     </script>
 	<main>
 		{% block main %}{% endblock %}

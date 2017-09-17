@@ -13,10 +13,13 @@
             url: '/api/signIn',
             data: {
                 id: user.uid,
-                email: user.email
+                email: user.email,
+                name: user.displayName,
+                photo: user.photoURL,
             }
         }).done(
             function() {
+                console.log(user);
                 window.location = '/home';
             }
         ).fail(
