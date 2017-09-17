@@ -1,6 +1,7 @@
 body {
     background: #618751 !important;
 }
+
 /* Navigation */
 .logo{
     vertical-align: middle;
@@ -11,6 +12,7 @@ img.center{
     display: block;
     margin-left: auto;
     margin-right: auto;
+    margin-top:6.5%;
 }
 
 h3 {
@@ -21,7 +23,35 @@ h3 {
     margin-left: 30%;
     width: 40%;
 }
-    
+
+p {
+    color: white;
+    font-weight: 200;
+    text-align: center;
+    font-size: large;
+    margin-left: 30%;
+    width: 40%;
+}
+
+button a {
+    color: white;
+    text-decoration: none;
+}
+
+button a:hover {
+    color: white;
+    text-decoration: none;
+}
+
+button:hover{
+    background-color: #c75035;
+}
+
+button a:visited{
+    text-decoration: none;
+    color: white;
+}
+
 .logo{
     margin-top: 10px;
 }
@@ -34,51 +64,51 @@ h3 {
     margin-bottom: 80px;
   }
 
-  .form-pickup-heading{
-    margin-bottom:30px;
-  }
+.form-pickup-heading{
+margin-bottom:30px;
+}
 
-  .form-pickup {
-    max-width: 380px;
-    padding: 15px 35px 45px;
-    margin: 0 auto;
-    background-color: #fff;
-    border: 1px solid rgba(0,0,0,0.1);
+.form-pickup {
+max-width: 380px;
+padding: 15px 35px 45px;
+margin: 0 auto;
+background-color: #fff;
+border: 1px solid rgba(0,0,0,0.1);
 
-    .form-control {
-      position: relative;
-      font-size: 16px;
-      height: auto;
-      padding: 10px;
+.form-control {
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
 
-        &:focus {
-          z-index: 2;
-        }
+    &:focus {
+      z-index: 2;
     }
-  }
+}
+}
 
-    textarea {
-      width: 100%;
-      border: 1px solid #cccccc;
-      padding: 8px;
-  }
+textarea {
+  width: 100%;
+  border: 1px solid #cccccc;
+  padding: 8px;
+}
 
-  .form-spacing{
-    margin-bottom:10px;
-  }
+.form-spacing{
+margin-bottom:10px;
+}
 
-  .more-bottle{
-    color:#618751;
-    margin:5px 0 15px 0;
-    float:right;
-    background-color: #ffffff;
-    border: 0;
-  }
+.more-bottle{
+color:#618751;
+margin:5px 0 15px 0;
+float:right;
+background-color: #ffffff;
+border: 0;
+}
 
-  .button-call-to-action{
-    background-color:#618751;
-  }
+.button-call-to-action{
+background-color:#618751;
+}
 
-  .button-call-to-action:hover{
-    background-color:#4e6d41;
-  }
+.button-call-to-action:hover{
+background-color:#4e6d41;
+}

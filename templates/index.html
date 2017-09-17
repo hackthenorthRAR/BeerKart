@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 {% block extraStyles %}
-    <link rel='stylesheet' href='/static/main.css'>
+    <link rel='stylesheet' href='/static/style.css'>
 {% endblock %}
 
 {% block main %}
-    <p>Put stuff here!</p>
     <script>
     firebase.auth().onAuthStateChanged(function(user) {
       if (user && window.location.pathname === '/') {
@@ -27,4 +26,23 @@
       }
     });
     </script>
+    <div id="frontpage" style="text-align:center;">
+        <img src="/static/beerpicture.svg" alt="Beer bottles" class="center" style="width:10%">
+        <h3><br />Green is the new black<br /></h3>
+        <p id="frontpage-text"><br />Don't have time to recycle your empty liquor bottles? Don't Worry, BeerKart helps connect you with hundreds of people who would love to take your old bottles and recycle them for you.</p>
+        <button style="background-color:#dd5f42; color:white; padding:15px 30px; margin:0 auto; margin-top:30px; border:none;"><a href="#" onclick='signIn()'>Login</a></button>
+    </div>
+    <script>
+    var provider = new firebase.auth.GoogleAuthProvider();
+    function signIn() {
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          var token = result.credential.accessToken;
+          // The signed-in user info.
+          var user = result.user;
+          // ...
+        });
+    }
+    </script>
+
 {% endblock %}
