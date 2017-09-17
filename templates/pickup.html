@@ -108,20 +108,21 @@ function initMap() {
   domElements = $('p[id^="address-"]').toArray();
 
   function addAddress(index) {
-    console.log(domElements.length);
+    console.log('adding address', index);
     if (index == domElements.length) {
       return
     }
-    el = domElements[index];
+    addressEl = domElements[index];
     var latlng = {
-      lat: parseFloat(el.getAttribute('lat')),
-      lng: parseFloat(el.getAttribute('long'))
+      lat: parseFloat(addressEl.getAttribute('lat')),
+      lng: parseFloat(addressEl.getAttribute('long'))
     };
     geocoder.geocode({'location': latlng}, function(results, status) {
+      console.log(index, results, status)
       if (status === 'OK') {
           if (results[0]) {
-            el.innerHTML = results[0].formatted_address;
-            setTimeout("wait = true", 2000);
+            console.log('info')
+            addressEl.innerHTML = results[0].formatted_address;
           } else {
             window.alert('No results found');
           }
@@ -175,15 +176,16 @@ function initMap() {
       }
 
       distanceCount = 0
-      distanceElements = domElements = $('p[id^="distance-"]').toArray();
+      distanceElements = $('p[id^="distance-"]').toArray();
       function addDistance() {
         if (distanceCount == distanceElements.length) {
           return
         }
-        el = distanceElements[distanceCount];
+
+        distanceEl = distanceElements[distanceCount]
         var requestlatlng = {
-          lat: parseFloat(el.getAttribute('lat')),
-          lng: parseFloat(el.getAttribute('long'))
+          lat: parseFloat(distanceEl.getAttribute('lat')),
+          lng: parseFloat(distanceEl.getAttribute('long'))
         };
 
         var service = new google.maps.DistanceMatrixService();
@@ -197,8 +199,8 @@ function initMap() {
       function setDistanceInDom(response, status)
       {
         if (status == 'OK') {
-          el = distanceElements[distanceCount];
-          el.innerHTML = response.rows[0].elements[0].distance['text'];
+          distanceEl = distanceElements[distanceCount];
+          distanceEl.innerHTML = response.rows[0].elements[0].distance['text'];
         }
         distanceCount += 1
         setTimeout(addDistance, 1000)
