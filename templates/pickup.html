@@ -17,6 +17,7 @@
           <div class="user-order-next">
             <h3 style='color: black'>{{item.name}}</h3>
             <p style = 'color: black; text-align: left; width: 80%; margin-left: 0px', id='address-{{item.uniqueId}}' lat='{{item.lat}}' long='{{item.long}}'>Address</p>
+            <p style = 'color: black; text-align: left; width: 80%; margin-left: 0px', id='distance-{{item.uniqueId}}' lat='{{item.lat}}' long='{{item.long}}'>Distance</p>
             <p style=" color: black; text-align: left; margin-left: 0px; width: 80%" class="user-order-collapsed-{{item.uniqueId}}">{{item.bottlecount}} Bottles, each ({{item.bottletype}})</p>
             {% if item.isDefaultMessage is equalto false %}
               <p style=" color: black; text-align: left; margin-left: 0px; width: 80%" class="user-order-collapsed-{{item.uniqueId}}">{{item.message}}</p>
@@ -108,7 +109,7 @@ function initMap() {
 
   function addAddress(index) {
     console.log(domElements.length);
-    if (index == domElements.length + 1) {
+    if (index == domElements.length) {
       return
     }
     el = domElements[index];
@@ -130,6 +131,7 @@ function initMap() {
       });
     setTimeout(function () {addAddress(index+1)}, 1000);
   }
+
   addAddress(0);
     var randommarker = {lat: 43.469571, lng: -80.539660};
     jobLocationMarker = new google.maps.Marker({
@@ -145,6 +147,7 @@ function initMap() {
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
+
             var ownLocationMarker = new google.maps.Marker({
               position: pos,
               map: map,
@@ -161,6 +164,7 @@ function initMap() {
             });
             map.setCenter(pos);
             map.setZoom(15);
+            addDistance(0);
           },
           function() {
             handleLocationError(true, infoWindow, map.getCenter());
@@ -168,6 +172,36 @@ function initMap() {
       } else {
         // Browser doesn't support Geolocation
         handleLocationError(false, infoWindow, map.getCenter());
+      }
+
+      distanceCount = 0
+      distanceElements = domElements = $('p[id^="distance-"]').toArray();
+      function addDistance() {
+        if (distanceCount == distanceElements.length) {
+          return
+        }
+        el = distanceElements[distanceCount];
+        var requestlatlng = {
+          lat: parseFloat(el.getAttribute('lat')),
+          lng: parseFloat(el.getAttribute('long'))
+        };
+
+        var service = new google.maps.DistanceMatrixService();
+        service.getDistanceMatrix({
+          origins: [new google.maps.LatLng(requestlatlng['lat'], requestlatlng['lng'])],
+          destinations: [new google.maps.LatLng(pos['lat'], pos['lng'])],
+          travelMode: 'DRIVING'
+        }, setDistanceInDom);
+      }
+
+      function setDistanceInDom(response, status)
+      {
+        if (status == 'OK') {
+          el = distanceElements[distanceCount];
+          el.innerHTML = response.rows[0].elements[0].distance['text'];
+        }
+        distanceCount += 1
+        setTimeout(addDistance, 1000)
       }
 }
 
