@@ -8,6 +8,33 @@
         <img src="/static/beerpicture.svg" alt="Beer bottles" class="center" style="width:10%">
         <h3><br />Pick Up Accepted<br /></h3>
         <p id="frontpage-text"><br />A collector has accepted your request. <br /> The collector is on their way now. Once <br /> your collector arrives, simply click the <br /> button below to complete the order</p>
-        <button style="background-color:#dd5f42; color:white; padding:15px 30px; margin:0 auto; margin-top:30px; border:none;"><a href="/complete">Order has completed</a></button>
+        <button onclick='deleteRequests()' style="background-color:#dd5f42; color:white; padding:15px 30px; margin:0 auto; margin-top:30px; border:none;"><a href="/complete">Order has completed</a></button>
     </div>
+    <script>
+    var firebaseUser;
+  	firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+      	firebaseUser = user;
+      }
+    });
+    	function deleteRequests()
+    	{
+        $.ajax({
+            type: 'POST',
+            url: '/api/deleteRequest',
+            data: {
+                id: firebaseUser.uid
+            }
+        }).done(
+            function() {
+                window.location = '/complete';
+            }
+        ).fail(
+            function(data) {
+            	console.log(data);
+                alert('error');
+            }
+        );
+    	}
+    </script>
 {% endblock %}

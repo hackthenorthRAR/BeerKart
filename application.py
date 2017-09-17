@@ -206,4 +206,40 @@ def pickupConfirm():
 def complete():
     return render_template('complete.html')
 
+@app.route('/api/getAccepted', methods=['POST'])
+def getAccepted():
+    conn = psycopg2.connect(database='users', user='maxroach', host='localhost', port=26257)
+    # Make each statement commit immediately.
+    conn.set_session(autocommit=True)
+    # Open a cursor to perform database operations.
+    cur = conn.cursor()
+
+    cur.execute("SELECT pickupid FROM requests WHERE googleid='" + request.form['id'] + "'")
+    rows = cur.fetchall()
+    allSatisifed = True
+    for row in rows:
+        if not row[0]:
+            allSatisifed = False
+            break
+
+    cur.close()
+
+    if allSatisifed:
+        return 'All taken'
+
+    return 'Not claimed'
+
+@app.route('/api/deleteRequest', methods=['POST'])
+def delete():
+    conn = psycopg2.connect(database='users', user='maxroach', host='localhost', port=26257)
+    # Make each statement commit immediately.
+    conn.set_session(autocommit=True)
+    # Open a cursor to perform database operations.
+    cur = conn.cursor()
+
+    cur.execute("DELETE FROM requests WHERE googleid='" + request.form['id'] + "'")
+
+    cur.close()
+
+    return 'Successful'
 

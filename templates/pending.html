@@ -9,4 +9,34 @@
         <h3><br />Just a few more moments<br /></h3>
         <p id="frontpage-text"><br />We've sent your pick up request to our<br /> collectors. A confirmation message will <br /> appear once someone has accepted your <br /> request. </p>
     </div>
+
+    <script>
+  	var firebaseUser;
+  	firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+      	firebaseUser = user;
+      	startPolling();
+      }
+    });
+    function startPolling() {
+    	$.ajax({
+            type: 'POST',
+            url: '/api/getAccepted',
+            data: {
+                id: firebaseUser.uid,
+            }
+        }).done(
+            function(data) {
+                if (data == 'All taken') {
+                	window.location = '/pickupConfirm'
+                }
+            }
+        ).fail(
+            function() {
+                alert('error');
+            }
+        );
+    	setTimeout(startPolling, 2000);
+    }
+    </script>
 {% endblock %}
