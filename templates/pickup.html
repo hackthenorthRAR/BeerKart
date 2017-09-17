@@ -1,31 +1,31 @@
 {% extends 'base.html' %}
 
+{% block extraStyles %}
+    <link rel='stylesheet' href='/static/style.css'>
+{% endblock %}
+
 {% block main %}
 <div class="collector-container">
-  <h1 style="margin:2%;">Select a location for pick up</h1>
+  <h1 style="margin:2%; text-align:center; color: white">Select a location for pick up</h1>
 
   <!-- left side (1)-->
   <div class="collector-container-section">
     {% for item in rows %}
-      <div class="user-order">
+      <div class="user-order" style="box-shadow: 2px 2px 5px #888888;">
         <div class="user-order-image">
           <img src="{{item.photo}}" alt="user-image">
           <div class="user-order-next">
-            <h3>{{item.name}}</h3>
-            <p id='address' lat='{{item.lat}}' long='{{item.long}}'>Address</p>
-            <a href='javascript:void(0)' class="view-details" onclick="toggleDetails('{{item.uniqueId}}', {{item.lat}}, {{item.long}})">View Details</a>
+            <h3 style='color: black'>{{item.name}}</h3>
+            <p style = 'color: black; text-align: left; width: 80%; margin-left: 0px', id='address' lat='{{item.lat}}' long='{{item.long}}'>Address</p>
+            <p style=" color: black; text-align: left; margin-left: 0px; width: 80%" class="user-order-collapsed-{{item.uniqueId}}">{{item.bottlecount}} Bottles, each ({{item.bottletype}})</p>
+            {% if item.isDefaultMessage is equalto false %}
+              <p style=" color: black; text-align: left; margin-left: 0px; width: 80%" class="user-order-collapsed-{{item.uniqueId}}">{{item.message}}</p>
+            {% endif %}
+            <a href='javascript:void(0)' class="view-details" onclick="toggleAddress('{{item.uniqueId}}', {{item.lat}}, {{item.long}})">View Address</a>
           </div>
           <div class="user-order-next2">
             <button onclick="pickUpOrder('{{item.requestId}}', '{{item.googleid}}', '{{item.uniqueId}}')" id='button-{{item.uniqueId}}' picker='{{item.pickupid}}' class="btn-user-order">Select</button>
           </div>
-            <div class="user-order-image">
-              <h3 class="user-order-collapsed-{{item.uniqueId}}">Bottles</h3>
-              <p class="user-order-collapsed-{{item.uniqueId}}">{{item.bottlecount}} ({{item.bottletype}})</p>
-              {% if item.isDefaultMessage is equalto false %}
-                <h3 class="user-order-collapsed-{{item.uniqueId}}">Message</h3>
-                <p class="user-order-collapsed-{{item.uniqueId}}">{{item.message}}</p>
-              {% endif %}
-            </div>
         </div>
     </div>
     {% endfor %}
@@ -43,10 +43,8 @@
   var ownLocationMarker;
   var jobLocationMarker;
 
-  function toggleDetails(id, lat, long)
+  function toggleAddress(id, lat, long)
   {
-    $('*[class^="user-order-collapsed-"]').hide();
-    $(".user-order-collapsed-" + id).toggle();
     var latlng = new google.maps.LatLng(lat, long);
     jobLocationMarker.setPosition(latlng);
     jobLocationMarker.setZIndex(999);
@@ -85,11 +83,6 @@
         })
       }
     });
-
-  $(document).ready(function(){
-
-      $('*[class^="user-order-collapsed-"]').hide();
-  });
 
 
 

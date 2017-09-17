@@ -194,4 +194,16 @@ def claimRequest():
 
     return 'Successful';
 
+@app.route('/pending')
+def pending():
+    return render_template('pending.html')
+
+@app.route('/pickupConfirm')
+def pickupConfirm():
+    return render_template('pickupConfirm.html')
+
+@app.route('/complete')
+def complete():
+    return render_template('complete.html')
+
 
