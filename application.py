@@ -100,14 +100,17 @@ def apiRequest():
     bottleType = request.form['bottleType']
     bottleCount = request.form['bottleCount']
     comment = request.form['comment']
-
-    send_url = 'http://freegeoip.net/json'
-    r = requests.get(send_url)
-    j = json.loads(r.text)
-    lat = j['latitude']
-    lon = j['longitude']
-
-    print(lat, lon)
+    lat = 0
+    lon = 0
+    if not 'latitude' in request.form:
+        send_url = 'http://freegeoip.net/json'
+        r = requests.get(send_url)
+        j = json.loads(r.text)
+        lat = j['latitude']
+        lon = j['longitude']
+    else:
+        lat = request.form['latitude']
+        lon = request.form['longitude']
 
     cur.execute(
          "INSERT INTO requests " + 
