@@ -40,6 +40,12 @@
             <div class="navbar-header">
                 <a href='/'><img src="/static/BeerKart.svg" alt="BeerKart logo" class="logo"/></a>
             </div>
+            <div class='navbar-collapse collapse'>
+                <ul class="nav navbar-nav navbar-right">
+                <li><a href='/' onclick="firebase.auth().signOut(); window.location='/'">Sign Out</a>
+                </li>
+                </ul>
+            </div>
         </div>
     </nav>
     <script>
