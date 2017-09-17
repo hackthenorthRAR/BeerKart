@@ -16,23 +16,12 @@
       <input type='hidden' name='bottleType' value='{{ bottleType }}'>
       <input type='hidden' name='bottleCount' value='{{ bottleCount }}'>
       <input type='hidden' name='comment' value='{{ comment }}'>
-      <input id='latitude' type='hidden' name='latitude'>
-      <input id='longitude' type='hidden' name='longitude'>
       <input id='formId' type='hidden' name='id' value=''>
     </form>
     <script>
       firebase.auth().onAuthStateChanged(function(user) {
         $('#formId').val(user.uid);
-      });
-
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            function(position) {
-              $('#latitude').val(position.coords.latitude);
-              $('#longitude').val(position.coords.longitude);
-            }
-          );
-        }
+    });
   </script>
 </div>
 
