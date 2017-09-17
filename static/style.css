@@ -121,3 +121,97 @@ background-color:#618751;
 .button-call-to-action:hover{
 background-color:#4e6d41;
 }
+
+
+  /* Map */
+#map {
+    height: 400px;
+    width: 98%;
+}
+
+
+/*Body Content*/
+.collector-container{
+  width:100%;
+  /*background-color:red;*/
+  /*overflow:auto;*/
+}
+
+.collector-container-section{
+  width:46%;
+  /*background-color:pink;*/
+  margin:2%;
+  float:left;
+  /*overflow:auto;*/
+}
+
+/* User Order */
+  .user-order{
+    width:96%;
+    /*height:100px;*/
+    background-color:white;
+    margin:2%;
+    overflow:hidden;
+  }
+
+  .user-order-image {
+    background-color:white;
+    /*box-shadow: 2px 2px 2px #888888;*/
+  }
+
+  .user-order-image img{
+    height:100px;
+    float:left;
+    background-color:white;
+  }
+
+  .user-order-bottle{
+    /*background-color:red;*/
+    height:50%;
+    float:left;
+  }
+
+
+
+  .user-order-next {
+      padding: 10px;
+      float: left;
+      width:65%;
+  }
+
+  .user-order-next h3{
+    margin:0px;
+  }
+
+  .user-order-next2 {
+    float:left;
+  }
+
+  .btn-user-order{
+    margin-top:50%;
+    margin-bottom:50%;
+    background-color: #618751;
+    border: none;
+    color: white;
+    padding: 10px;
+  }
+
+  .btn-user-order:hover{
+    background-color:#4e6d41;
+  }
+
+  .view-details{
+    color: #618751;
+    font-weight:bold;
+  }
+
+  .view-details:hover{
+    color:#4e6d41;
+  }
+
+  .user-order-collapsed{
+    padding-left:15px;
+    display:none;
+    background-color:white;
+    margin-top:0;
+  }

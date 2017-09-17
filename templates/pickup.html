@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="collector-container">
+  <h1 style="margin:2%;">Select a location for pick up</h1>
+
+  <!-- left side (1)-->
+  <div class="collector-container-section">
+    {% for item in rows %}
+      <div class="user-order">
+        <div class="user-order-image">
+          <img src="{{item.photo}}" alt="user-image">
+          <div class="user-order-next">
+            <h3>{{item.name}}</h3>
+            <p id='address' lat='{{item.lat}}' long='{{item.long}}'>Address</p>
+            <a href='javascript:void(0)' class="view-details" onclick="toggleDetails('{{item.uniqueId}}', {{item.lat}}, {{item.long}})">View Details</a>
+          </div>
+          <div class="user-order-next2">
+            <button onclick="pickUpOrder('{{item.requestId}}', '{{item.googleid}}', '{{item.uniqueId}}')" id='button-{{item.uniqueId}}' picker='{{item.pickupid}}' class="btn-user-order">Select</button>
+          </div>
+            <div class="user-order-image">
+              <h3 class="user-order-collapsed-{{item.uniqueId}}">Bottles</h3>
+              <p class="user-order-collapsed-{{item.uniqueId}}">{{item.bottlecount}} ({{item.bottletype}})</p>
+              {% if item.isDefaultMessage is equalto false %}
+                <h3 class="user-order-collapsed-{{item.uniqueId}}">Message</h3>
+                <p class="user-order-collapsed-{{item.uniqueId}}">{{item.message}}</p>
+              {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+  <!-- right side -->
+  <div class="collector-container-section">
+      <!-- MAP -->
+      <div id="map"></div>
+  </div>
+
+<script>
+
+  var ownLocationMarker;
+  var jobLocationMarker;
+
+  function toggleDetails(id, lat, long)
+  {
+    $('*[class^="user-order-collapsed-"]').hide();
+    $(".user-order-collapsed-" + id).toggle();
+    var latlng = new google.maps.LatLng(lat, long);
+    jobLocationMarker.setPosition(latlng);
+    jobLocationMarker.setZIndex(999);
+  }
+
+  function pickUpOrder(requestId, googleid, domId)
+  {
+    $.ajax({
+        type: 'POST',
+        url: '/api/claimRequest',
+        data: {
+            requestId: requestId,
+            googleId: googleid,
+        }
+    }).done(
+        function() {
+            console.log(domId, 'works');
+            $('#button-' + domId).html('Done!')
+            $('#button-' + domId).attr('disabled','disabled');
+        }
+    ).fail(
+        function() {
+            alert('error');
+        }
+    );
+  }
+
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        console.log('boom');
+        $('button').each(function (index, el) {
+          if (user.uid === el.getAttribute('picker')) {
+            el.innerHTML = 'Done!';
+            el.disabled = true;
+          }
+        })
+      }
+    });
+
+  $(document).ready(function(){
+
+      $('*[class^="user-order-collapsed-"]').hide();
+  });
+
+
+
+// Note: This requires that you consent to location sharing when
+// prompted by your browser. If you see the error "The Geolocation service
+// failed.", it means you probably did not give permission for the browser to
+// locate you.
+
+
+var map, infoWindow;
+function initMap() {
+    var pos;
+    map = new google.maps.Map(
+      document.getElementById('map'),
+      {
+        center: {lat: 38.897326, lng: -77.036583},
+        zoom: 16
+      }
+    );
+
+    var geocoder = new google.maps.Geocoder;
+    var latlng = {
+      lat: parseFloat(document.getElementById('address').getAttribute('lat')),
+      lng: parseFloat(document.getElementById('address').getAttribute('long'))
+    };
+    geocoder.geocode({'location': latlng}, function(results, status) {
+        if (status === 'OK') {
+            if (results[0]) {
+              document.getElementById('address').innerHTML = results[0].formatted_address;
+            } else {
+              window.alert('No results found');
+            }
+          } else {
+            window.alert('Geocoder failed due to: ' + status);
+          }
+        });
+
+    document.getElementById('')
+
+    var randommarker = {lat: 43.469571, lng: -80.539660};
+    jobLocationMarker = new google.maps.Marker({
+      position: randommarker,
+      map: map,
+      icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|618751'
+    });
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            var ownLocationMarker = new google.maps.Marker({
+              position: pos,
+              map: map,
+            });
+            var cityCircle = new google.maps.Circle({
+              strokeColor: '#FFf001',
+              strokeOpacity: 0.8,
+              strokeWeight: 4,
+              fillColor: '#ffff00',
+              fillOpacity: 0.33,
+              map: map,
+              center: pos,
+              radius: 200
+            });
+            map.setCenter(pos);
+            map.setZoom(15);
+          },
+          function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+      } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, infoWindow, map.getCenter());
+      }
+}
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(
+      browserHasGeolocation
+      ? 'Error: The Geolocation service failed.'
+      : 'Error: Your browser doesn\'t support geolocation.'
+    );
+    infoWindow.open(map);
+}
+</script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMkD_XSQlo-6PjRuSVVnLNKO0fI-7okxc&callback=initMap">
+</script>
+
+{% endblock %}
