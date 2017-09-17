@@ -33,6 +33,15 @@ p {
     width: 40%;
 }
 
+form p{
+    color: initial;
+    font-weight: initial;
+    text-align: initial;
+    font-size: initial;
+    margin-left: initial;
+    width: initial;
+}
+
 button a {
     color: white;
     text-decoration: none;
