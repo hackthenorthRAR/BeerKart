@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block extraStyles %}
+  <link rel="stylesheet" href="/static/style.css">
+{% endblock %}
+
 {% block main %}
   <div class="wrapper">
     <form method='POST' action='/confirmRequest' class="form-pickup">

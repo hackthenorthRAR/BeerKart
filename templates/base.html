@@ -12,7 +12,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="/static/style.css">
     {% block extraStyles %}{% endblock %}
   </head>
   <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
@@ -36,14 +35,11 @@
   </script>
   <body>
     <!-- NAVIGATION -->
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-inverse" style="border-radius:0px;">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a href='/'><img src="/static/BeerKart.svg" alt="BeerKart logo" class="logo"/></a>
             </div>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#" onclick='signIn()'>Login</a></li>
-            </ul>
         </div>
     </nav>
     <script>

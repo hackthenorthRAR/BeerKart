@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block extraStyles %}
+    <link rel='stylesheet' href='/static/style.css'>
+{% endblock %}
+
+{% block main %}
+    <div id="frontpage" style="text-align:center;">
+        <img src="/static/beerpicture.svg" alt="Beer bottles" class="center" style="width:10%">
+        <h3><br />Pick Up Completed<br /></h3>
+        <button style="background-color:#dd5f42; color:white; padding:15px 30px; margin:0 auto; margin-top:30px; border:none;"><a href="/home">Go back to homepage</a></button>
+    </div>
+{% endblock %}

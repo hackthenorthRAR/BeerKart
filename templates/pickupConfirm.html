@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block extraStyles %}
+    <link rel='stylesheet' href='/static/style.css'>
+{% endblock %}
+
+{% block main %}
+    <div id="frontpage" style="text-align:center;">
+        <img src="/static/beerpicture.svg" alt="Beer bottles" class="center" style="width:10%">
+        <h3><br />Pick Up Accepted<br /></h3>
+        <p id="frontpage-text"><br />A collector has accepted your request. <br /> The collector is on their way now. Once <br /> your collector arrives, simply click the <br /> button below to complete the order</p>
+        <button style="background-color:#dd5f42; color:white; padding:15px 30px; margin:0 auto; margin-top:30px; border:none;"><a href="/complete">Order has completed</a></button>
+    </div>
+{% endblock %}
