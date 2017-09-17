@@ -16,7 +16,7 @@
           <img src="{{item.photo}}" alt="user-image">
           <div class="user-order-next">
             <h3 style='color: black'>{{item.name}}</h3>
-            <p style = 'color: black; text-align: left; width: 80%; margin-left: 0px', id='address' lat='{{item.lat}}' long='{{item.long}}'>Address</p>
+            <p style = 'color: black; text-align: left; width: 80%; margin-left: 0px', id='address-{{item.uniqueId}}' lat='{{item.lat}}' long='{{item.long}}'>Address</p>
             <p style=" color: black; text-align: left; margin-left: 0px; width: 80%" class="user-order-collapsed-{{item.uniqueId}}">{{item.bottlecount}} Bottles, each ({{item.bottletype}})</p>
             {% if item.isDefaultMessage is equalto false %}
               <p style=" color: black; text-align: left; margin-left: 0px; width: 80%" class="user-order-collapsed-{{item.uniqueId}}">{{item.message}}</p>
@@ -102,26 +102,35 @@ function initMap() {
         zoom: 16
       }
     );
+  var geocoder = new google.maps.Geocoder;
 
-    var geocoder = new google.maps.Geocoder;
+  domElements = $('p[id^="address-"]').toArray();
+
+  function addAddress(index) {
+    console.log(domElements.length);
+    if (index == domElements.length + 1) {
+      return
+    }
+    el = domElements[index];
     var latlng = {
-      lat: parseFloat(document.getElementById('address').getAttribute('lat')),
-      lng: parseFloat(document.getElementById('address').getAttribute('long'))
+      lat: parseFloat(el.getAttribute('lat')),
+      lng: parseFloat(el.getAttribute('long'))
     };
     geocoder.geocode({'location': latlng}, function(results, status) {
-        if (status === 'OK') {
-            if (results[0]) {
-              document.getElementById('address').innerHTML = results[0].formatted_address;
-            } else {
-              window.alert('No results found');
-            }
+      if (status === 'OK') {
+          if (results[0]) {
+            el.innerHTML = results[0].formatted_address;
+            setTimeout("wait = true", 2000);
           } else {
-            window.alert('Geocoder failed due to: ' + status);
+            window.alert('No results found');
           }
-        });
-
-    document.getElementById('')
-
+        } else {
+          window.alert('Geocoder failed due to: ' + status);
+        }
+      });
+    setTimeout(function () {addAddress(index+1)}, 1000);
+  }
+  addAddress(0);
     var randommarker = {lat: 43.469571, lng: -80.539660};
     jobLocationMarker = new google.maps.Marker({
       position: randommarker,
