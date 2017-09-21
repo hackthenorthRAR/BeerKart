@@ -39,7 +39,3 @@ As with all minimal viable products, we were quite selective in our chosen featu
 
 1. UX and UI Design: Conducting thorough user research to understand the pain points of our user and continue to improve the user experience and user interface design.
 2. New and Improved Features: We hope to implement a few more features that we believe would truly benefit the web application. These include the ability for a user to schedule bottle pick up services with date, time, and location, the ability to auto-assign Collectors with pick up orders, the ability to give Collectors and Schedulers a star rating after pick up, and to have a continuous search method that will allow Collectors to be auto assigned to pick up orders so long as they are online and available.
-
-## Built With
-
-The design of the product took form in many ways. We planned our product mostly through pen and paper, whiteboarding, and through shared Google Docs. The UI was created using Sketch App. And we developed and deployed BeerKart using CockroachDB, Firebase, Google Maps API, Jinja 2, Flask, Python, HTML, CSS, JavaScript, and AJAX.
